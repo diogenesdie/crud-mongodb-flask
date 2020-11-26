@@ -128,6 +128,16 @@ def update_user(id):
         email      = json.loads(request.data).get('email')
         name       = json.loads(request.data).get('name')
         password   = json.loads(request.data).get('password').encode()
+
+        if search_exists_user(email):
+            return Response(
+                response = json.dumps({
+                    "error": "email already registered",
+                }),
+                status   = 200,
+                mimetype ="application/json"
+            )
+
         dbResponse = db.user.update_one(
             {"_id": ObjectId(id)},
             {
@@ -235,3 +245,4 @@ def login():
 
 if __name__ == '__main__':
     app.run()
+
